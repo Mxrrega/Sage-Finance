@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import UserContext from "./Context/UserContext";
 
 export default function Home() {
-  // Simulação de um valor de saldo
-  const saldo = 2500.00; // Este valor pode ser substituído pelo valor real do saldo
+  
+  const saldo = 2500.00; 
+
+  const {usuario} = useContext( UserContext )
 
   return (
     <View style={{ flex: 1 }}>
+      <Text>Bem Vindo: {usuario}</Text>
       <View style={styles.header}>
         <Text style={styles.headerTextSmall}>Saldo em Contas</Text>
         <Text style={styles.headerTextBig}>R$ {saldo.toFixed(2)}</Text>
@@ -63,9 +67,9 @@ export default function Home() {
           </View>
           <Text style={[styles.divisionValueText, { marginBottom: 10 }]}>R$1500,00</Text>
           <View style={{
-            width: 340, // Largura da linha
-            height: 4, // Altura da linha
-            backgroundColor: 'gray', // Cor de fundo da linha (pode ser ajustada conforme necessário)
+            width: 340, 
+            height: 4, 
+            backgroundColor: 'gray', 
             opacity: 0.7, 
           }} />
           <Text style={styles.bottomLeftText}>Total</Text>
@@ -79,20 +83,20 @@ export default function Home() {
 const styles = {
   header: {
     backgroundColor: "#2C3E50",
-    paddingVertical: 70, // Aumentei a distância entre o cabeçalho e as divisões
+    paddingVertical: 70, 
     alignItems: "center",
     position: "relative",
-    borderRadius: 20, // Define o raio da borda do cabeçalho
+    borderRadius: 20, 
   },
   headerTextSmall: {
-    fontSize: 10, // Tamanho menor para "Saldo em Contas"
+    fontSize: 10, 
     fontWeight: "bold",
     color: "white",
     marginBottom: 5,
-    opacity: 0.7, // Define a opacidade para 70%
+    opacity: 0.7, 
   },
   headerTextBig: {
-    fontSize: 20, // Tamanho maior para o valor do saldo
+    fontSize: 20, 
     fontWeight: "bold",
     color: "white",
   },
@@ -126,14 +130,14 @@ const styles = {
   },
   division: {
     backgroundColor: "#2C3E50",
-    height: 150, // Altura menor
-    marginVertical: 18, // Mais separadas entre si
+    height: 150, 
+    marginVertical: 18, 
     marginHorizontal: 9,
     borderRadius: 20,
-    justifyContent: "flex-start", // Alinha os itens à esquerda
-    alignItems: "flex-start", // Alinha os itens ao topo
-    flexDirection: "column", // Para alinhar ícones e textos na vertical
-    paddingLeft: 10, // Adiciona um espaçamento à esquerda
+    justifyContent: "flex-start", 
+    alignItems: "flex-start", 
+    flexDirection: "column", 
+    paddingLeft: 10, 
   },
   divisionText: {
     color: "black",
@@ -148,13 +152,13 @@ const styles = {
   divisionIconText: {
     color: "white",
     fontSize: 18,
-    marginLeft: 10, // Adiciona um espaço entre o ícone e o texto
+    marginLeft: 10, 
   },
   divisionValueText: {
     color: "white",
     fontSize: 16,
-    marginLeft: 34, // Adiciona um espaçamento para o valor
-    opacity: 0.8, // Define a opacidade para 80%
+    marginLeft: 34,
+    opacity: 0.8, 
   },
   bottomLeftText: {
     position: "absolute",
