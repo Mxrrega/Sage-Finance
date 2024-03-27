@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import {UserContext} from "./Context/UserContext";
 
@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Bem Vindo: {usuario}</Text>
+      
       <View style={styles.header}>
         <Text style={styles.headerTextSmall}>Saldo em Contas</Text>
         <Text style={styles.headerTextBig}>R$ {saldo.toFixed(2)}</Text>
@@ -31,6 +31,7 @@ export default function Home() {
         </View>
       </View>
       <View>
+      <Text>Bem Vindo: {usuario}</Text>
         <Text style={styles.divisionText}>Cartões de crédito</Text>
         <View style={styles.division}>
           <View style={styles.divisionIconTextContainer}>
@@ -80,13 +81,14 @@ export default function Home() {
   );
 }
 
-const styles = {
+const styles = StyleSheet.create({
   header: {
     backgroundColor: "#2C3E50",
     paddingVertical: 70, 
     alignItems: "center",
     position: "relative",
-    borderRadius: 20, 
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20, 
   },
   headerTextSmall: {
     fontSize: 10, 
@@ -174,4 +176,4 @@ const styles = {
     color: "white",
     fontSize: 14,
   },
-};
+});

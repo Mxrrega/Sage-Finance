@@ -22,12 +22,8 @@ function UserProvider({children})
     async function infoUsuario()
     {
         const usuario = await AsyncStorage.getItem( "usuario" );
-        if( usuario == 'Matheus' ) {
         setUsuario( usuario );
         setLogado(true);
-        } else {
-            setLogado(false)
-        }
     
     }
     useEffect(()=> {

@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -11,7 +11,8 @@ import { UserContext } from './Context/UserContext';
 import React, { useContext, useState } from 'react'; 
 import Login from './Login';
 
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
+
 
 const CircleButton = ({ onPress }) => (
     <TouchableOpacity style={styles.circleButton} onPress={onPress}>
@@ -37,15 +38,13 @@ export default function Rotas() {
     return (
         <NavigationContainer>
         <Tab.Navigator
-           screenOptions={{
-             tabBarStyle: {
+           barStyle= {{
                height: 70, 
-               backgroundColor: '#2C3E50',
                borderTopLeftRadius: 10,
                borderTopRightRadius: 10,
                justifyContent: 'center', 
-             },
-           }}
+             }
+           }
          >
            <Tab.Screen
              name="Home"
