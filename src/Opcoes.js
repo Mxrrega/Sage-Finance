@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Text, View, Switch } from "react-native";
+import { Text, View, Switch, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons'; 
 
-export default function Opcoes() {
-  const [modoEscuro, setModoEscuro] = useState(false);
-  const corHeader = modoEscuro ? '#2C3E50' : '#2980B9';
+export default function Opcoes() 
+{
+
 
   return (
     <View>
@@ -15,8 +15,6 @@ export default function Opcoes() {
         <Text style={styles.optionText}>🌙 Modo Escuro</Text>
         <Switch
           style={{ marginLeft: 'auto' }}
-          value={modoEscuro}
-          onValueChange={(value) => setModoEscuro(value)}
         />
         
       </View>   
@@ -31,7 +29,7 @@ export default function Opcoes() {
 }
   const styles = StyleSheet.create({
     header: {
-      backgroundColor: corHeader,
+      backgroundColor: '#2980B9',
       padding: 50,
     },
     headerText: {
