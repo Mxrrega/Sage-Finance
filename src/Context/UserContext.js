@@ -1,7 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
     
 
@@ -22,8 +22,18 @@ function UserProvider({children})
     async function infoUsuario()
     {
         const usuario = await AsyncStorage.getItem( "usuario" );
+        if( usuario == 'Matheus' ) {
         setUsuario( usuario );
+        setLogado(true);
+        } else {
+            setLogado(false)
+        }
+    
     }
+    useEffect(()=> {
+
+    }, [])
+
     return(
         <UserContext.Provider value={{usuario: usuario, logado: logado, Login, infoUsuario }}>
             {children}

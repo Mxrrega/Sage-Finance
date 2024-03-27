@@ -1,23 +1,21 @@
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from './Context/UserContext';
 
-export default function Login({setLogado}) {
+export default function Login() {
 
     const[ email, setEmail ] = useState("");
     const[ senha, setSenha ] = useState("");
     const[ erro, setErro ] = useState( false );
 
-    async function realizaLogin()
+    const { Login } = useContext( UserContext );
+    
+    function realizaLogin()
     {
-        if( email == "teste@gmail.com" && senha == "123") {
-            await AsyncStorage.setItem( 'usuario' , email );
-            setLogado(true);
-        }
-        else {
-            setErro( true );
-        }
+      Login( email, senha);
     }
+
   return (
     <View style={css.container}>
         <View style={css.box}>

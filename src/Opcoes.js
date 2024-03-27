@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Text, View, Switch, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons'; 
+import { useContext } from "react";
+import { UserContext } from "./Context/UserContext";
 
 export default function Opcoes() 
 {
-
+  const {usuario} = useContext( UserContext);
 
   return (
     <View>
+      <Text>Bem Vindo: {usuario}</Text>
       <View style={styles.header}>
         <Text style={styles.headerText}>Opções</Text>
       </View>

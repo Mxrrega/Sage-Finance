@@ -1,16 +1,17 @@
-/*import { Text, View } from 'react-native'
-import React, { Component } from 'react'
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Home from './src/Home';
-import Transacoes from './src/Transacoes';
-import Cartoes from './src/Cartoes';
-import Opcoes from './src/Opcoes';
+import Home from './Home';
+import Transacoes from './Transacoes';
+import Cartoes from './Cartoes';
+import Opcoes from './Opcoes';
+import { UserContext } from './Context/UserContext';
+import React, { useContext, useState } from 'react'; 
+import Login from './Login';
 
+const Tab = createBottomTabNavigator();
 
 const CircleButton = ({ onPress }) => (
     <TouchableOpacity style={styles.circleButton} onPress={onPress}>
@@ -19,6 +20,19 @@ const CircleButton = ({ onPress }) => (
   );
 
 export default function Rotas() {
+
+  const [showMoreBalls, setShowMoreBalls] = useState(false);
+
+  const toggleBalls = () => {
+    setShowMoreBalls(!showMoreBalls);
+  };
+
+  const {logado} = useContext( UserContext );
+
+  if( logado == false ) {
+    return( <Login />)
+  }
+
 
     return (
         <NavigationContainer>
@@ -86,7 +100,9 @@ export default function Rotas() {
          {showMoreBalls && (
            <View style={styles.extraBallsContainer}>
              <View style={styles.halfCircle} />
+             <View style={styles.espaço} />
              <View style={styles.halfCircle} />
+             <View style={styles.espaço} />
              <View style={styles.halfCircle} />
            </View>
          )} 
@@ -121,9 +137,10 @@ export default function Rotas() {
     },
     extraBallsContainer: {
       flexDirection: 'row',
+      display: 'flex',
       justifyContent: 'space-around',
       position: 'absolute',
-      bottom: 150, 
+      bottom: 100, 
       alignSelf: 'center', 
     },
     halfCircle: {
@@ -131,6 +148,8 @@ export default function Rotas() {
       height: 40,
       borderRadius: 20,
       backgroundColor: '#2980B9',
-      transform: [{ rotate: '180deg' }],
     },
-  }); */
+    espaço: {
+      width: 20
+    }
+  }); 

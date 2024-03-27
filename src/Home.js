@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import UserContext from "./Context/UserContext";
+import {UserContext} from "./Context/UserContext";
 
 export default function Home() {
   
@@ -44,9 +44,9 @@ export default function Home() {
           </View>
           <Text style={[styles.divisionValueText, { marginBottom: 10 }]}>R$2000,00</Text>
           <View style={{
-            width: 340, // Largura da linha
-            height: 4, // Altura da linha
-            backgroundColor: 'gray', // Cor de fundo da linha (pode ser ajustada conforme necessário)
+            width: 340, 
+            height: 4, 
+            backgroundColor: 'gray', 
             opacity: 0.7, 
           }} />
           <Text style={styles.bottomLeftText}>Total</Text>
