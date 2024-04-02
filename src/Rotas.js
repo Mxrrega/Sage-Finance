@@ -1,114 +1,184 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 import Home from './Home';
 import Transacoes from './Transacoes';
 import Cartoes from './Cartoes';
 import Opcoes from './Opcoes';
+import Receitas from './Receitas';
 import { UserContext } from './Context/UserContext';
-import React, { useContext, useState } from 'react'; 
+import React, { useContext, useState } from 'react';
 import Login from './Login';
+
 
 const Tab = createMaterialBottomTabNavigator();
 
 
-const CircleButton = ({ onPress }) => (
-    <TouchableOpacity style={styles.circleButton} onPress={onPress}>
-      <MaterialCommunityIcons name="axis" size={25}/>
+ 
+  const BotaoMenu = ({ setSubMenu }) => (
+    <View style={styles.circleButton}>
+      <TouchableOpacity
+      style={{
+        width: 50,
+        height: 50,
+        backgroundColor: "black",
+        padding: 15,
+        borderRadius: 100,
+        justifyContent: 'center',
+      }}
+      onPress={(e) => {
+        e.preventDefault();
+        setSubMenu((current) => !current);
+      }}
+    >
+
     </TouchableOpacity>
+    </View>
+   
   );
 
-export default function Rotas() {
 
-  const [showMoreBalls, setShowMoreBalls] = useState(false);
-
-  const toggleBalls = () => {
-    setShowMoreBalls(!showMoreBalls);
-  };
-
-  const {logado} = useContext( UserContext );
-
-  if( logado == false ) {
-    return( <Login />)
-  }
+  export default function Rotas({handle}) {
 
 
-    return (
-        <NavigationContainer>
-        <Tab.Navigator
-           barStyle= {{
-               height: 70, 
-               borderTopLeftRadius: 10,
-               borderTopRightRadius: 10,
-               justifyContent: 'center', 
-             }
-           }
-         >
-           <Tab.Screen
-             name="Home"
-             component={Home}
-             options={{
-               tabBarIcon: ({ color, size }) => (
-                 <MaterialCommunityIcons name="home" color={color} size={size} />
-               ),
-             }}
-           />
-           <Tab.Screen
-             name="Transações"
-             component={Transacoes}
-             options={{
-               tabBarIcon: ({ color, size }) => (
-                 <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
-               ),
-             }}
-           />
-           <Tab.Screen
-             name="Botao"
-             component={CircleButton}
-             options={{
-               tabBarButton: ({ onPress }) => (
-                 <TouchableOpacity onPress={onPress}>
-                   <CircleButton onPress={toggleBalls} />
-                 </TouchableOpacity>
-               ),
-             }}
-           />
-           <Tab.Screen
-             name="Cartões"
-             component={Cartoes}
-             options={{
-               tabBarIcon: ({ color, size }) => (
-                 <MaterialCommunityIcons name="credit-card" color={color} size={size} />
-               ),
-             }}
-           />
-           <Tab.Screen
-             name="Opções"
-             component={Opcoes}
-             options={{
-               tabBarIcon: ({ color, size }) => (
-                 <MaterialCommunityIcons name="cogs" color={color} size={size} />
-               ),
-             }}
-           />
-         </Tab.Navigator>
-   
+    const Menu = ({ subMenu }) => {
+      if (!subMenu) return null;
   
-         {showMoreBalls && (
-           <View style={styles.extraBallsContainer}>
-             <View style={styles.halfCircle} />
-             <View style={styles.espaço} />
-             <View style={styles.halfCircle} />
-             <View style={styles.espaço} />
-             <View style={styles.halfCircle} />
-           </View>
-         )} 
-         
-       </NavigationContainer>
-    )
+      return (
+        <View style={{ position: 'absolute', bottom: 55, width: '100%', alignItems: 'center' }}>
+          <View style={styles.boxopcoes}>
+            <TouchableOpacity style={styles.opcoesbox} onPress={exibirareceitas}>
+              <Text>Receita</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.opcoesbox} onPress={exibirdespesas}>
+              <Text>Despesa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.opcoesbox} onPress={exibirCartoes}>
+              <Text>cartoes</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      );
+    }
+    const ButtonScreen = () => null;
+ 
+    const { logado } = useContext(UserContext);
+    const [subMenu, setSubMenu] = useState(false);
+
+    const [receitas, setReceitas] = useState(false);
+    const [despesas, setDespesas] = useState(false);
+    const [cartoes, setCartoes] = useState(false);
+
+    if (receitas === true) {
+      return(
+        <Receitas handle={ setReceitas }/>
+      )
+    }
+    function exibirareceitas() {
+      setReceitas(true)
+    }
+
+
+    if (despesas === true) {
+      return(
+        <Cartoes handle={ setDespesas }/>
+      )
+    }
+    function exibirdespesas() {
+      setDespesas(true)
+    }
+
+
+    if (cartoes === true) {
+      return(
+        <Cartoes handle={ setCartoes }/>
+      )
+    }
+    function exibirCartoes() {
+      setCartoes(true)
+    }
+ 
+    if (logado == false) {
+      //return <Login />;
+    }
+ 
+    return (
+      <NavigationContainer>
+        <Tab.Navigator
+          barStyle={{
+            height: 70,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            justifyContent: "center",
+          }}
+        >
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Transações"
+            component={Transacoes}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="format-list-bulleted"
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+          name=" "
+          options={({ navigation }) => ({
+            tabBarButton: (props) => (
+              <View>
+                <BotaoMenu setSubMenu={setSubMenu} />
+                <Menu subMenu={subMenu} />
+              </View>
+            ),
+          })}
+          component={ButtonScreen}
+        />
+          <Tab.Screen
+            name="Cartões"
+            component={Cartoes}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons
+                  name="credit-card"
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Opções"
+            component={Opcoes}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="cogs" color={color} size={size} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+ 
+        <BotaoMenu setSubMenu={setSubMenu} />
+        <Menu subMenu={subMenu} />
+      </NavigationContainer>
+    );
   }
+
 
   const styles = StyleSheet.create({
     container: {
@@ -117,38 +187,26 @@ export default function Rotas() {
       alignItems: 'center',
       justifyContent: 'center',
     },
-    
-    circleButton: {
-      width: 55,
-      height: 55,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#2980B9',
-      borderRadius: 35,
-      marginBottom: 20,
-      top: '-30%'
-    },
-    circle: {
-      width: 60,
-      height: 60,
-      borderRadius: 30,
-      backgroundColor: '#FFF',
-    },
-    extraBallsContainer: {
-      flexDirection: 'row',
-      display: 'flex',
+    boxopcoes: {
+      alignItems: "center" ,
+      backgroundColor: 'white', 
+      height: 100, 
       justifyContent: 'space-around',
-      position: 'absolute',
-      bottom: 100, 
-      alignSelf: 'center', 
+      padding: 10, 
+      width: "97%", 
+      display:"flex", 
+      flexDirection: "row",
     },
-    halfCircle: {
-      width: 40,
-      height: 40,
-      borderRadius: 20,
-      backgroundColor: '#2980B9',
+    opcoesbox: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"
     },
-    espaço: {
-      width: 20
+    circleButton: {
+      justifyContent: 'center',
+      display: 'flex',
+
     }
-  }); 
+  });
+
