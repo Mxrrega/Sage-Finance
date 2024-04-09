@@ -18,6 +18,10 @@ export default function Login() {
 
   return (
     <View style={css.container}>
+      <Image
+            style={{flex:1, width: 50, height: 50}}
+            source={require('../src/images/logo.png')}
+          />
         <View style={css.box}>
       <TextInput style={css.input} placeholder='Email' value={email} onChangeText={ (digitado) => setEmail( digitado )}/>
       <TextInput style={css.input} placeholder='Senha' value={senha} onChangeText={ (digitado) => setSenha( digitado )}/>

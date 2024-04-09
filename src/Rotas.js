@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 
 import Home from './Home';
@@ -12,6 +13,7 @@ import Receitas from './Receitas';
 import { UserContext } from './Context/UserContext';
 import React, { useContext, useState } from 'react';
 import Login from './Login';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -24,17 +26,17 @@ const Tab = createMaterialBottomTabNavigator();
       style={{
         width: 50,
         height: 50,
-        backgroundColor: "black",
-        padding: 15,
+        backgroundColor: "#2980B9",
         borderRadius: 100,
         justifyContent: 'center',
+        alignItems: 'center'
       }}
       onPress={(e) => {
         e.preventDefault();
         setSubMenu((current) => !current);
       }}
     >
-
+      <FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}}/>
     </TouchableOpacity>
     </View>
    
@@ -102,7 +104,7 @@ const Tab = createMaterialBottomTabNavigator();
     }
  
     if (logado == false) {
-      //return <Login />;
+      return <Login />;
     }
  
     return (
