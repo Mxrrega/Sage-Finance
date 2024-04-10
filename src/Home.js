@@ -6,6 +6,7 @@ import {UserContext} from "./Context/UserContext";
 import { faArrowDown, faArrowUp, faBuildingColumns, faWallet } from "@fortawesome/free-solid-svg-icons";
 import Receitas from "./Receitas";
 import Despesas from "./Despesas";
+import { ReceitasContext } from "./Context/ReceitasContext";
 
 export default function Home() {
   
@@ -19,6 +20,8 @@ export default function Home() {
   const despesassaldo = 1000.00;
 
   const {usuario} = useContext( UserContext )
+
+  const { totalReceitas } = useContext(ReceitasContext);
 
   if (receitas === true) {
     return(
@@ -49,7 +52,7 @@ export default function Home() {
           </View>
           <View>
           <Text style={styles.bottomText}>Receitas</Text>
-            <Text style={styles.subbottomTextreceitas}>R${receitassaldo.toFixed(2)}</Text>
+            <Text style={styles.subbottomTextreceitas}>R${totalReceitas}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.caixadespesas} onPress={exibirdespesas}>

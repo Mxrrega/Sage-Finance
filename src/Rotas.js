@@ -19,39 +19,21 @@ import Despesas from './Despesas';
 
 const Tab = createMaterialBottomTabNavigator();
 
-
- 
   const BotaoMenu = ({ setSubMenu }) => (
     <View style={styles.circleButton}>
-      <TouchableOpacity
-      style={{
-        width: 50,
-        height: 50,
-        backgroundColor: "#2980B9",
-        borderRadius: 100,
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}
-      onPress={(e) => {
-        e.preventDefault();
-        setSubMenu((current) => !current);
-      }}
-    >
-      <FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}}/>
-    </TouchableOpacity>
+      <TouchableOpacity style={styles.botaomenu} onPress={(e) => { e.preventDefault(); setSubMenu((current) => !current);}}>
+        <FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}}/>
+      </TouchableOpacity>
     </View>
    
   );
-
-
   export default function Rotas({handle}) {
 
 
     const Menu = ({ subMenu }) => {
       if (!subMenu) return null;
-  
       return (
-        <View style={{ position: 'absolute', bottom: 55, width: '100%', alignItems: 'center' }}>
+        <View style={styles.subMenu}>
           <View style={styles.boxopcoes}>
             <TouchableOpacity style={styles.opcoesbox} onPress={exibirareceitas}>
               <Text>Receita</Text>
@@ -209,7 +191,18 @@ const Tab = createMaterialBottomTabNavigator();
     circleButton: {
       justifyContent: 'center',
       display: 'flex',
-
+    },
+    botaomenu: {
+      width: 50,
+        height: 50,
+        backgroundColor: "#2980B9",
+        borderRadius: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    subMenu: { 
+      bottom: 150, 
+      width: '100%', 
     }
   });
 

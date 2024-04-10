@@ -1,10 +1,11 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ReceitasContext = createContext();
+const ReceitasContext = createContext(0);
 
 const ReceitasProvider = ({ children }) => {
   const [receitas, setReceitas] = useState([]);
+  const [ totalReceitas, setTotalReceitas] = useState(0);
 
   useEffect(() => {
     const getSavedReceitas = async () => {
@@ -47,14 +48,24 @@ const ReceitasProvider = ({ children }) => {
     saveReceitas(newReceitas);
   };
 
+  const calcularTotalReceitas = () => {
+    let total = 0;
+    receitas.forEach((receita) => {
+      total += receita.valor; 
+    });
+    setTotalReceitas( total );
+  };
+
   return (
     <ReceitasContext.Provider
       value={{
-        receitas,
+        receitas: receitas,
         addReceita,
         getReceitas,
         getReceitaById,
         deleteReceita,
+        calcularTotalReceitas,
+        totalReceitas: totalReceitas
       }}
     >
       {children}

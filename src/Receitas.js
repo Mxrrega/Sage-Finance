@@ -4,16 +4,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faBookmark, faCheck, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { SelectList } from 'react-native-dropdown-select-list';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ReceitasContext } from './Context/ReceitasContext';
 
 export default function Receitas({ handle }) {
-
   const [valoreceita, setValorReceita ] = useState("");
   const [descricao, setDescricao ] = useState("");
   const [categoria, setCategoria] = useState("");
   const [conta, setConta] = useState("");
-  const [receitas, setReceitas] = useState([]);
-  
+  const [receitas, setReceitas] = useState([]);  
   const [navHeight, setNavHeight] = useState(Dimensions.get('window').height * 0.85);
+
+  const{calcularTotalReceitas} = useContext( ReceitasContext );
 
   useEffect(() => {
     const updateLayout = () => {
@@ -26,7 +27,6 @@ export default function Receitas({ handle }) {
       Dimensions.removeEventListener('change', updateLayout);
     };
   }, []);
-
   useEffect(() => {
     const getSavedReceitas = async () => {
       try {
@@ -65,6 +65,7 @@ export default function Receitas({ handle }) {
   };
 
   function adicionar() {
+    calcularTotalReceitas();
     Keyboard.dismiss();
     setValorReceita("");
     setDescricao("");
