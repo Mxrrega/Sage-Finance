@@ -27,9 +27,13 @@ export default function Receitas({ handle }) {
       Dimensions.removeEventListener('change', updateLayout);
     };
   }, []);
+
   useEffect(() => {
     const getSavedReceitas = async () => {
       try {
+
+        await AsyncStorage.setItem('receitas', receitas)
+
         const value = await AsyncStorage.getItem('receitas');
         if (value !== null) {
           setReceitas(JSON.parse(value));
@@ -52,7 +56,6 @@ export default function Receitas({ handle }) {
 
     try {
       const receitasString = JSON.stringify([...receitas, receita]);
-      await AsyncStorage.setItem('receitas', receitasString);
       console.log('Receita salva com sucesso!');
       Keyboard.dismiss();
       setValorReceita("");
