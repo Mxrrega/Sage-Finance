@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, Keyboard, ScrollView, Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft, faBookmark, faCheck, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 import { SelectList } from 'react-native-dropdown-select-list';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Receitas({ handle }) {
+
   const [valoreceita, setValorReceita ] = useState("");
   const [descricao, setDescricao ] = useState("");
   const [categoria, setCategoria] = useState("");
   const [conta, setConta] = useState("");
+  const [receitas, setReceitas] = useState([]);
   
   const [navHeight, setNavHeight] = useState(Dimensions.get('window').height * 0.85);
 
@@ -24,12 +27,50 @@ export default function Receitas({ handle }) {
     };
   }, []);
 
+  useEffect(() => {
+    const getSavedReceitas = async () => {
+      try {
+        const value = await AsyncStorage.getItem('receitas');
+        if (value !== null) {
+          setReceitas(JSON.parse(value));
+        }
+      } catch (error) {
+        console.error('Error retrieving receitas:', error);
+      }
+    };
+
+    getSavedReceitas();
+  }, []);
+
+  const saveReceita = async () => {
+    const receita = {
+      valoreceita: valoreceita,
+      descricao: descricao,
+      categoria: categoria,
+      conta: conta,
+    };
+
+    try {
+      const receitasString = JSON.stringify([...receitas, receita]);
+      await AsyncStorage.setItem('receitas', receitasString);
+      console.log('Receita salva com sucesso!');
+      Keyboard.dismiss();
+      setValorReceita("");
+      setDescricao("");
+      setCategoria("");
+      setConta("");
+    } catch (error) {
+      console.error('Error saving receita:', error);
+    }
+  };
+
   function adicionar() {
     Keyboard.dismiss();
     setValorReceita("");
     setDescricao("");
     setCategoria("");
     setConta("");
+    console.log(receitas)
   }
 
   const categoriaconst = [
@@ -133,10 +174,7 @@ export default function Receitas({ handle }) {
                 <FontAwesomeIcon icon={faCheck} style={{ color: "#ffffff", }} />
               </TouchableOpacity>
             </View>
-            <Text>{valoreceita}</Text>
-            <Text>{descricao}</Text>
-            <Text>{conta}</Text>
-            <Text>{categoria}</Text>
+          
           </View>
         </View>
       </ScrollView>
