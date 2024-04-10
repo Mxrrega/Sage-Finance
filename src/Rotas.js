@@ -14,6 +14,7 @@ import { UserContext } from './Context/UserContext';
 import React, { useContext, useState } from 'react';
 import Login from './Login';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Despesas from './Despesas';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -86,7 +87,7 @@ const Tab = createMaterialBottomTabNavigator();
 
     if (despesas === true) {
       return(
-        <Cartoes handle={ setDespesas }/>
+        <Despesas handle={ setDespesas }/>
       )
     }
     function exibirdespesas() {
@@ -104,7 +105,7 @@ const Tab = createMaterialBottomTabNavigator();
     }
  
     if (logado == false) {
-      return <Login />;
+      //return <Login />;
     }
  
     return (
