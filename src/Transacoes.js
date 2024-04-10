@@ -206,49 +206,103 @@ const styles = StyleSheet.create({
 });*/
 
 
-
-
-
-
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons'; // Importar FontAwesome
 
 // Componente reutilizável para representar cada item de transação
-const TransacaoItem = ({ icon, icon2, color, text1, text2 }) => {
+const TransacaoItem = ({ icon, icon2, color, text1, text2, valoremreal }) => {
+  // Constante para representar a cor da seta com base no valor em reais
+  const CorSeta = {
+    definirCor(valor) {
+      return valor >= 0 ? 'green' : 'red';
+    }
+  };
+
   return (
     <View style={styles.bottomContainer}>
-      <FontAwesome name={icon} style={styles.icon} color={color} />
+      <FontAwesome name={icon} style={[styles.icon, { color: CorSeta.definirCor(valoremreal.valor) }]} />
       <View style={styles.subBottomContainer}>
         <Text style={styles.subBottomText2}>{text1}</Text>
         <View style={styles.subBottomTextContainer}>
-          <FontAwesome name={icon2} style={styles.icon2} color={color} />
+          <FontAwesome name={icon2} style={[styles.icon2, { color: CorSeta.definirCor(valoremreal.valor) }]} />
           <Text style={[styles.bottomText, { marginLeft: 10 }]}>{text2}</Text>
         </View>
+        <Text style={[styles.bottomText, { marginLeft: 10 }]}>{valoremreal.valor}</Text>
       </View>
     </View>
   );
 };
 
+// Constante para representar o valor em reais
+const ValorEmReal = {
+  valor: 0, // Valor inicial
+  setValor(novoValor) {
+    if (typeof novoValor === 'number') {
+      this.valor = novoValor;
+    } else {
+      console.error('O valor deve ser um número.');
+    }
+  },
+  obterValor() {
+    return this.valor;
+  }
+};
+
+// Função para formatar o texto do dia da semana e do dia do mês
+const formatarDiaSemana = (diaSemana, diaMes) => `${diaSemana} - dia ${diaMes}`;
+
+// Constante para representar o texto do dia da semana
+const diaSemana = formatarDiaSemana("Segunda-Feira", 1);
+
+// Constante para representar as contas do usuário
+const contasUsuario = {
+  mercado: {
+    id: 1,
+    icon: "shopping-cart",
+    icon2: "arrow-down",
+    color: "black",
+    text1: "Mercado",
+  },
+  investimentos: {
+    id: 2,
+    icon: "money",
+    icon2: "arrow-up",
+    color: "black",
+    text1: "Investimentos",
+  },
+  contasPagar: {
+    id: 3,
+    icon: "user-circle",
+    icon2: "arrow-down",
+    color: "black",
+    text1: "Contas a pagar",
+  },
+  cartaoCredito: {
+    id: 4,
+    icon: "credit-card",
+    icon2: "arrow-down",
+    color: "black",
+    text1: "Cartão de Crédito",
+  },
+};
+
 export default function Transacoes() {
  
-  const balancoMensal = <TransacaoItem icon2="dollar" color="red" text1="Balanço Mensal" text2="R$1000" />;
-  const saldoAtual = <TransacaoItem icon2="dollar" color="green" text1="Saldo Atual" text2="R$1000" />;
-  const mercado = <TransacaoItem icon="shopping-cart" icon2="arrow-down" color="black" text1="Mercado" text2="R$500" />;
-  const investimentos = <TransacaoItem icon="money" icon2="arrow-up" color="black" text1="Investimentos" text2="R$750" />;
-  const contasPagar = <TransacaoItem icon="user-circle" icon2="arrow-down" color="black" text1="Contas a pagar" text2="R$1200" />;
+  // Definindo o valor em real para cada conta do usuário
+  Object.values(contasUsuario).forEach(conta => {
+    conta.valoremreal = ValorEmReal;
+  });
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Transações</Text>
       </View>
-      {balancoMensal}
-      {saldoAtual}
-      <Text style={styles.diasemana}>Quarta-Feira - dia 5</Text>
-      {mercado}
-      {investimentos}
-      {contasPagar}
+      <TransacaoItem {...contasUsuario.mercado} />
+      <TransacaoItem {...contasUsuario.investimentos} />
+      <TransacaoItem {...contasUsuario.contasPagar} />
+      <TransacaoItem {...contasUsuario.cartaoCredito} />
     </View>
   );
 }
@@ -305,11 +359,5 @@ const styles = StyleSheet.create({
   icon2: {
     fontSize: 30,
     marginRight: 5,
-  },
-  diasemana: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
   },
 });
