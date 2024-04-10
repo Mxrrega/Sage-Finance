@@ -98,29 +98,6 @@ export default function Home() {
           </View>
         </View>
       </View>
-      {/*<View>
-        <Text style={styles.divisionText}>Cartões de crédito</Text>
-        <View style={styles.division}>
-          <View style={styles.divisionIconTextContainer}>
-            <FontAwesome name="bank" size={24} color="white" />
-            <Text style={styles.divisionIconText}>Banco</Text>
-          </View>
-          <Text style={styles.divisionValueText}>R$3000,00</Text>
-          <View style={styles.divisionIconTextContainer}>
-            <FontAwesome name="user" size={24} color="white" />
-            <Text style={styles.divisionIconText}>Carteira</Text>
-          </View>
-          <Text style={[styles.divisionValueText, { marginBottom: 10 }]}>R$1500,00</Text>
-          <View style={{
-            width: 340, 
-            height: 4, 
-            backgroundColor: 'gray', 
-            opacity: 0.7, 
-          }} />
-          <Text style={styles.bottomLeftText}>Total</Text>
-          <Text style={styles.bottomRightText}>R$1000</Text>
-        </View>
-        </View>*/}
     </View>
   );
 }
