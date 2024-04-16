@@ -87,7 +87,7 @@ const Tab = createMaterialBottomTabNavigator();
     }
  
     if (logado == false) {
-      //return <Login />;
+      return <Login />;
     }
  
     return (

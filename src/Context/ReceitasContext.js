@@ -1,76 +1,82 @@
 import React, { createContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ReceitasContext = createContext(0);
+export const ReceitasContext = createContext();
 
-const ReceitasProvider = ({ children }) => {
-  const [receitas, setReceitas] = useState([]);
-  const [ totalReceitas, setTotalReceitas] = useState(0);
+export const ReceitasProvider = ({ children }) => {
+  
+  const [valoreceita, setValorReceita] = useState([]); 
+  const [descricao, setDescricao] = useState('');
+  const [categoria, setCategoria] = useState('');
+  const [conta, setConta] = useState('');
+  const [somaReceitas, setSomaReceitas] = useState(0);
 
   useEffect(() => {
-    const getSavedReceitas = async () => {
+    const getStoredData = async () => {
       try {
-        const value = await AsyncStorage.getItem('receitas');
-        if (value !== null) {
-          setReceitas(JSON.parse(value));
+        const data = await AsyncStorage.getItem('data');
+        console.log( data );
+        if (data !== null) {
+          const parsedData = JSON.parse(data);
+          if (parsedData && Array.isArray(parsedData.valoreceita)) {
+            setValorReceita(parsedData.valoreceita); 
+            console.log(valoreceita)
+          }
         }
+        console.log(data)
       } catch (error) {
-        console.error('Error retrieving receitas:', error);
+        console.log('Erro buscar dados', error);
       }
     };
 
-    getSavedReceitas();
+    getStoredData();
   }, []);
 
-  const addReceita = (receita) => {
-    const newReceitas = [...receitas, receita];
-    setReceitas(newReceitas);
-    saveReceitas(newReceitas);
-  };
+  useEffect(() => {
+    calcularSoma();
+  }, [valoreceita]);
 
-  const saveReceitas = async (receitas) => {
+  async function saveData() 
+  {
     try {
-      const receitasString = JSON.stringify(receitas);
-      await AsyncStorage.setItem('receitas', receitasString);
-      console.log('Receitas salvas com sucesso!');
+      const local = await AsyncStorage.getItem('data') || [];
+      const data = { valoreceita: valoreceita, descricao: descricao, categoria: categoria, conta: conta };
+      const save = [ ...local, data ];
+      await AsyncStorage.setItem('data', JSON.stringify( save ) );
+      console.log(save);
     } catch (error) {
-      console.error('Error saving receitas:', error);
+      console.log('Erro ao salvar:', error);
     }
   };
-
-  const getReceitas = () => receitas;
-
-  const getReceitaById = (id) => receitas.find((receita) => receita.id === id);
-
-  const deleteReceita = (id) => {
-    const newReceitas = receitas.filter((receita) => receita.id !== id);
-    setReceitas(newReceitas);
-    saveReceitas(newReceitas);
-  };
-
-  const calcularTotalReceitas = () => {
-    let total = 0;
-    receitas.forEach((receita) => {
-      total += receita.valor; 
-    });
-    setTotalReceitas( total );
-  };
+  async function calcularSoma()
+  {
+    if (valoreceita.length > 0) {
+      const soma = valoreceita.reduce((total, receita) => total + parseFloat(receita.valor), 0);
+      setSomaReceitas(soma);
+      console.log(somaReceitas)
+    } else {
+      setSomaReceitas(1); 
+      console.log('Erro ao somar')
+    }
+  }
 
   return (
     <ReceitasContext.Provider
       value={{
-        receitas: receitas,
-        addReceita,
-        getReceitas,
-        getReceitaById,
-        deleteReceita,
-        calcularTotalReceitas,
-        totalReceitas: totalReceitas
+        valoreceita,
+        setValorReceita,
+        descricao,
+        setDescricao,
+        categoria,
+        setCategoria,
+        conta,
+        setConta,
+        saveData,
+        somaReceitas,
+        calcularSoma,
       }}
     >
       {children}
     </ReceitasContext.Provider>
   );
 };
-
-export { ReceitasContext, ReceitasProvider };

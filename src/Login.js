@@ -1,6 +1,5 @@
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from './Context/UserContext';
 
 export default function Login() {

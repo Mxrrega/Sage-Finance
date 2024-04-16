@@ -21,7 +21,7 @@ export default function Home() {
 
   const {usuario} = useContext( UserContext )
 
-  const { totalReceitas } = useContext(ReceitasContext);
+  const { somaReceitas } = useContext(ReceitasContext);
 
   if (receitas === true) {
     return(
@@ -52,7 +52,7 @@ export default function Home() {
           </View>
           <View>
           <Text style={styles.bottomText}>Receitas</Text>
-            <Text style={styles.subbottomTextreceitas}>R${totalReceitas}</Text>
+            <Text style={styles.subbottomTextreceitas}>R${somaReceitas}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.caixadespesas} onPress={exibirdespesas}>
