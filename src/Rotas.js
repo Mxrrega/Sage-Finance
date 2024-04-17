@@ -19,87 +19,99 @@ import Despesas from './Despesas';
 
 const Tab = createMaterialBottomTabNavigator();
 
-  const BotaoMenu = ({ setSubMenu }) => (
-    <View style={styles.circleButton}>
-      <TouchableOpacity style={styles.botaomenu} onPress={(e) => { e.preventDefault(); setSubMenu((current) => !current);}}>
-        <FontAwesomeIcon icon={faPlus} style={{color: "#ffffff",}}/>
-      </TouchableOpacity>
+const Menu = ({ subMenu }) => {
+  if (!subMenu) return null;
+
+  const [receitas, setReceitas] = useState(false);
+  const [despesas, setDespesas] = useState(false);
+  const [cartoes, setCartoes] = useState(false);
+
+  if (receitas === true) {
+    return(
+      <Receitas handle={ setReceitas }/>
+    )
+  }
+  function exibirareceitas() {
+    setReceitas(true)
+  }
+
+
+  if (despesas === true) {
+    return(
+      <Despesas handle={ setDespesas }/>
+    )
+  }
+  function exibirdespesas() {
+    setDespesas(true)
+  }
+
+
+  if (cartoes === true) {
+    return(
+      <Cartoes handle={ setCartoes }/>
+    )
+  }
+  function exibirCartoes() {
+    setCartoes(true)
+  }
+
+  return (
+    <View style={styles.subMenu}>
+      <View style={styles.boxopcoes}>
+        <TouchableOpacity style={styles.opcoesbox} onPress={exibirareceitas}>
+          <Text>Receita</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.opcoesbox} onPress={exibirdespesas}>
+          <Text>Despesa</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.opcoesbox} onPress={exibirCartoes}>
+          <Text>cartoes</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-   
   );
+}
+
+const BotaoMenu = ({ setSubMenu }) => (
+  <TouchableOpacity onPress={() => setSubMenu((current) => !current)}>
+    <View style={styles.circleButton}>
+      <FontAwesomeIcon icon={faPlus} style={{ color: "#ffffff" }} />
+    </View>
+  </TouchableOpacity>
+);
   export default function Rotas({handle}) {
 
-
-    const Menu = ({ subMenu }) => {
-      if (!subMenu) return null;
-      return (
-        <View style={styles.subMenu}>
-          <View style={styles.boxopcoes}>
-            <TouchableOpacity style={styles.opcoesbox} onPress={exibirareceitas}>
-              <Text>Receita</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.opcoesbox} onPress={exibirdespesas}>
-              <Text>Despesa</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.opcoesbox} onPress={exibirCartoes}>
-              <Text>cartoes</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
     const ButtonScreen = () => null;
  
     const { logado } = useContext(UserContext);
     const [subMenu, setSubMenu] = useState(false);
 
-    const [receitas, setReceitas] = useState(false);
-    const [despesas, setDespesas] = useState(false);
-    const [cartoes, setCartoes] = useState(false);
-
-    if (receitas === true) {
-      return(
-        <Receitas handle={ setReceitas }/>
-      )
-    }
-    function exibirareceitas() {
-      setReceitas(true)
-    }
-
-
-    if (despesas === true) {
-      return(
-        <Despesas handle={ setDespesas }/>
-      )
-    }
-    function exibirdespesas() {
-      setDespesas(true)
-    }
-
-
-    if (cartoes === true) {
-      return(
-        <Cartoes handle={ setCartoes }/>
-      )
-    }
-    function exibirCartoes() {
-      setCartoes(true)
-    }
  
-    if (logado == false) {
+    if ( !logado ) {
       return <Login />;
     }
  
     return (
       <NavigationContainer>
         <Tab.Navigator
-          barStyle={{
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            if (route.name === ' ') {
+              return <BotaoMenu setSubMenu={setSubMenu} />;
+            }
+          },
+        })}
+        tabBarOptions={{
+          showLabel: false, 
+          style: {
             height: 70,
             borderTopLeftRadius: 10,
             borderTopRightRadius: 10,
             justifyContent: "center",
-          }}
-        >
+          },
+        }}
+      >
           <Tab.Screen
             name="Home"
             component={Home}
@@ -124,14 +136,6 @@ const Tab = createMaterialBottomTabNavigator();
           />
           <Tab.Screen
           name=" "
-          options={({ navigation }) => ({
-            tabBarButton: (props) => (
-              <View>
-                <BotaoMenu setSubMenu={setSubMenu} />
-                <Menu subMenu={subMenu} />
-              </View>
-            ),
-          })}
           component={ButtonScreen}
         />
           <Tab.Screen
@@ -157,8 +161,6 @@ const Tab = createMaterialBottomTabNavigator();
             }}
           />
         </Tab.Navigator>
- 
-        <BotaoMenu setSubMenu={setSubMenu} />
         <Menu subMenu={subMenu} />
       </NavigationContainer>
     );

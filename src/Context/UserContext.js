@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const UserContext = createContext({usuario: "Matheus"});
+export const UserContext = createContext();
 
 function UserProvider({children}) 
 {
@@ -25,7 +25,7 @@ function UserProvider({children})
     
     }
     useEffect(()=> {
-
+        
     }, [])
 
     return(

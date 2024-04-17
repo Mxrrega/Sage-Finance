@@ -15,20 +15,20 @@ export const ReceitasProvider = ({ children }) => {
     const getStoredData = async () => {
       try {
         const data = await AsyncStorage.getItem('data');
-        console.log( data );
+        console.log('Dados recuperados:', data);
         if (data !== null) {
           const parsedData = JSON.parse(data);
-          if (parsedData && Array.isArray(parsedData.valoreceita)) {
-            setValorReceita(parsedData.valoreceita); 
-            console.log(valoreceita)
+          console.log('Dados parseados:', parsedData);
+          if (parsedData && Array.isArray(parsedData)) {
+            setValorReceita(parsedData); 
+            console.log('valoreceita:', parsedData);
           }
         }
-        console.log(data)
       } catch (error) {
-        console.log('Erro buscar dados', error);
+        console.log('Erro ao buscar dados:', error);
       }
     };
-
+  
     getStoredData();
   }, []);
 
@@ -36,27 +36,36 @@ export const ReceitasProvider = ({ children }) => {
     calcularSoma();
   }, [valoreceita]);
 
-  async function saveData() 
-  {
+  const saveData = async () => {
     try {
-      const local = await AsyncStorage.getItem('data') || [];
-      const data = { valoreceita: valoreceita, descricao: descricao, categoria: categoria, conta: conta };
-      const save = [ ...local, data ];
-      await AsyncStorage.setItem('data', JSON.stringify( save ) );
-      console.log(save);
+      const existingData = await AsyncStorage.getItem('data');
+      const local = existingData ? JSON.parse(existingData) : [];
+      const data = {
+        valor: valoreceita,
+        descricao: descricao,
+        categoria: categoria,
+        conta: conta,
+      }
+      local.push(data);
+      await AsyncStorage.setItem('data', JSON.stringify(local));
+      console.log(local);
     } catch (error) {
       console.log('Erro ao salvar:', error);
     }
   };
-  async function calcularSoma()
-  {
-    if (valoreceita.length > 0) {
-      const soma = valoreceita.reduce((total, receita) => total + parseFloat(receita.valor), 0);
-      setSomaReceitas(soma);
-      console.log(somaReceitas)
-    } else {
-      setSomaReceitas(1); 
-      console.log('Erro ao somar')
+
+  async function calcularSoma() {
+    try {
+      if (valoreceita.length > 0) {
+        const soma = valoreceita.reduce((total, receita) => total + parseFloat(receita.valoreceita), 0);
+        setSomaReceitas(soma);
+        console.log(soma);
+      } else {
+        setSomaReceitas(0); 
+        console.log('Erro ao somar: Nenhum valor de receita encontrado');
+      }
+    } catch (error) {
+      console.log('Erro ao calcular soma:', error);
     }
   }
 

@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { FontAwesome } from '@expo/vector-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'; 
-import {UserContext} from "./Context/UserContext";
 import { faArrowDown, faArrowUp, faBuildingColumns, faWallet } from "@fortawesome/free-solid-svg-icons";
 import Receitas from "./Receitas";
 import Despesas from "./Despesas";
@@ -19,7 +17,7 @@ export default function Home() {
 
   const despesassaldo = 1000.00;
 
-  const {usuario} = useContext( UserContext )
+
 
   const { somaReceitas } = useContext(ReceitasContext);
 
@@ -67,7 +65,7 @@ export default function Home() {
       </View>
 
       <View>
-      <Text>Bem Vindo: {usuario}</Text>
+
 
         <View style={styles.box}>
         <Text style={styles.divisionText}>Contas</Text>

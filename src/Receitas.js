@@ -73,7 +73,7 @@ export default function Receitas({ handle }) {
                 placeholder='R$0,00'
                 placeholderTextColor="#ffffff"
                 value={valoreceita}
-                onChangeText={ (digitado) => setValorReceita( digitado )}
+                onChangeText={setValorReceita}
               />
             </View>
           </View>
@@ -84,7 +84,7 @@ export default function Receitas({ handle }) {
                 placeholder='Descrição'
                 style={styles.descricaoInput}
                 value={descricao}
-                onChangeText={ (digitado) => setDescricao( digitado )}
+                onChangeText={setDescricao}
               />
             </View>
             <View style={styles.boxlinha}>

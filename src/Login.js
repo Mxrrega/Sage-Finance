@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { UserContext } from './Context/UserContext';
 
@@ -8,7 +8,7 @@ export default function Login() {
     const[ senha, setSenha ] = useState("");
     const[ erro, setErro ] = useState( false );
 
-    const { Login } = useContext( UserContext );
+    const { Login, logado } = useContext( UserContext );
     
     function realizaLogin()
     {
@@ -18,7 +18,7 @@ export default function Login() {
   return (
     <View style={css.container}>
       <Image
-            style={{flex:1, width: 50, height: 50}}
+            style={{ width: 100, height: 100, marginBottom: 50}}
             source={require('../src/images/logo.png')}
           />
         <View style={css.box}>
