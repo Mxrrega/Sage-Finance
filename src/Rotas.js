@@ -88,22 +88,21 @@ const BotaoMenu = ({ setSubMenu }) => (
 
  
     if ( !logado ) {
-      return <Login />;
+      //return <Login />;
     }
  
     return (
       <NavigationContainer>
-        <Tab.Navigator
+      <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
-            let iconName;
             if (route.name === ' ') {
               return <BotaoMenu setSubMenu={setSubMenu} />;
             }
           },
         })}
         tabBarOptions={{
-          showLabel: false, 
+          showLabel: false,
           style: {
             height: 70,
             borderTopLeftRadius: 10,

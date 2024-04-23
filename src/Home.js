@@ -1,19 +1,32 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'; 
 import { faArrowDown, faArrowUp, faBuildingColumns, faWallet } from "@fortawesome/free-solid-svg-icons";
 import Receitas from "./Receitas";
 import Despesas from "./Despesas";
 import { ReceitasContext } from "./Context/ReceitasContext";
+import * as Network from 'expo-network';
+import { faCcMastercard, faCcVisa } from "@fortawesome/free-brands-svg-icons";
 
 export default function Home() {
   
   const [receitas, setReceitas] = useState(false);
   const [despesas, setDespesas] = useState(false);
+  const [ rede, setRede ] = useState( true );
+
+  async function getStatus()
+    {
+        const status = await Network.getNetworkStateAsync();
+        if( status.type == "WIFI") {
+            setRede( false );
+        }
+    }
+
+    useEffect( () => {
+      getStatus();
+  } , [] );
   
   const saldo = 2500.00; 
-
-  const receitassaldo = 1000.00;
 
   const despesassaldo = 1000.00;
 
@@ -66,7 +79,6 @@ export default function Home() {
 
       <View>
 
-
         <View style={styles.box}>
         <Text style={styles.divisionText}>Contas</Text>
           <View style={styles.divcontasbox}>
@@ -98,6 +110,42 @@ export default function Home() {
             </View>
           </View>
         </View>
+
+        { rede ? <Text></Text> : 
+        <View style={styles.boxcartoes} >
+        <Text style={styles.divisionText}>Cartões de Crédito</Text>
+          <View style={styles.divcontasbox}>
+
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faCcMastercard} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Cartão Inter</Text>
+              <Text style={styles.somaCartao}>R$2.300,00</Text>
+              </View>
+            </View>
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faCcVisa} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Cartão Itaú</Text>
+              <Text style={styles.somaBanco}>R$1.000,00</Text>
+              </View>
+            </View>
+            <View style={styles.boxlinha}>
+              <View style={styles.linha}></View>
+            </View>
+            <View style={styles.totalContas}>
+              <Text style={styles.textTotal}>Total</Text>
+              <Text style={styles.textTotalNumNeg}>R$1.300,00</Text>
+            </View>
+          </View>
+        </View>
+        }
+
+
       </View>
     </View>
   );
@@ -209,6 +257,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
   },
+  somaCartao: {
+    color: '#DB0000',
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
   boxlinha: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -236,6 +289,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
     right: 20
+  },
+  textTotalNumNeg: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#DB0000',
+    right: 20
+  },
+  boxcartoes: {
+    marginVertical: 10, 
+    marginHorizontal: 10,
+    marginTop: 50
   }
   
 });

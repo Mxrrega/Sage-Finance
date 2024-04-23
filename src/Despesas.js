@@ -1,201 +1,267 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Keyboard, ScrollView, Dimensions } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowLeft, faBookmark, faCheck, faMicrophone } from '@fortawesome/free-solid-svg-icons';
-import { SelectList } from 'react-native-dropdown-select-list';
+import React, { useContext, useState, useEffect } from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'; 
+import { faArrowDown, faArrowUp, faBuildingColumns, faWallet } from "@fortawesome/free-solid-svg-icons";
+import Receitas from "./Receitas";
+import Despesas from "./Despesas";
+import { ReceitasContext } from "./Context/ReceitasContext";
+import * as Network from 'expo-network';
+import { faCcMastercard, faCcVisa } from "@fortawesome/free-brands-svg-icons";
+import { DespesasContext } from "./Context/DespesasContext";
 
-export default function Despesas({ handle }) {
-  const [valodespesa, setValorDespesa ] = useState("");
-  const [descricao, setDescricao ] = useState("");
-  const [categoria, setCategoria] = useState("");
-  const [conta, setConta] = useState("");
+export default function Home() {
   
-  const [navHeight, setNavHeight] = useState(Dimensions.get('window').height * 0.85);
+  const [receitas, setReceitas] = useState(false);
+  const [despesas, setDespesas] = useState(false);
+  const [ rede, setRede ] = useState( true );
 
-  useEffect(() => {
-    const updateLayout = () => {
-      const height = Dimensions.get('window').height;
-      const navNewHeight = height * 0.85;
-      setNavHeight(navNewHeight);
-    };
-    Dimensions.addEventListener('change', updateLayout);
-    return () => {
-      Dimensions.removeEventListener('change', updateLayout);
-    };
-  }, []);
+  async function getStatus()
+    {
+        const status = await Network.getNetworkStateAsync();
+        if( status.type == "WIFI") {
+            setRede( false );
+        }
+    }
 
-  function adicionar() {
-    Keyboard.dismiss();
-    setValorDespesa("");
-    setDescricao("");
-    setCategoria("");
-    setConta("");
+    useEffect( () => {
+      getStatus();
+  } , [] );
+  
+  const saldo = 2500.00; 
+
+  const despesassaldo = 1000.00;
+
+  const { somaDespesas } = useContext(DespesasContext);
+
+  const { somaReceitas } = useContext(ReceitasContext);
+
+  if (receitas === true) {
+    return(
+      <Receitas handle={ setReceitas }/>
+    )
+  }
+  function exibirareceitas() {
+    setReceitas(true)
   }
 
-  const categoriaconst = [
-    { key: '1', value: 'Investimentos' },
-    { key: '2', value: 'Casa' },
-    { key: '3', value: 'Presente' },
-    { key: '4', value: 'Prêmio' },
-    { key: '5', value: 'Salário' },
-    { key: '6', value: 'Outros' },
-  ];
-  const contaconst = [
-    { key: '1', value: 'Banco Inter' },
-    { key: '2', value: 'Banco Do Brasil' },
-    { key: '3', value: 'Itaú' },
-    { key: '4', value: 'Santander' },
-    { key: '5', value: 'C6' },
-    { key: '6', value: 'Nubank' },
-    { key: '7', value: 'Carteira' },
-  ];
+  if (despesas === true) {
+    return(
+      <Despesas handle={ setDespesas }/>
+    )
+  }
+  function exibirdespesas() {
+    setDespesas(true)
+  }
 
   return (
-    <View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={{ flex: 1, width: "100%", height: "100%", backgroundColor: "#2980B9" }}>
-          <View style={styles.header}>
-            <View style={styles.headerContent}>
-              <TouchableOpacity style={styles.backButton} onPress={() => handle(false)}>
-                <Text><FontAwesomeIcon icon={faArrowLeft} style={{ color: "#ffffff", }} /></Text>
-              </TouchableOpacity>
-              <Text style={styles.headerText}>Nova Despesa</Text>
-            </View>
-            <View style={styles.caixadespesa}>
-              <Text style={styles.valodespesacss}>Valor da despesa</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType='numeric'
-                placeholder='R$0,00'
-                placeholderTextColor="#ffffff"
-                value={valodespesa}
-                onChangeText={ (digitado) => setValorDespesa( digitado )}
-              />
-            </View>
+    <View style={{ flex: 1 }}>
+      <View style={styles.header}>
+        <Text style={styles.headerTextSmall}>Saldo em Contas</Text>
+        <Text style={styles.headerTextBig}>R$ {saldo.toFixed(2)}</Text>
+        <TouchableOpacity style={styles.caixareceitas} onPress={exibirareceitas}>
+          <View style={styles.bolareceitas}>
+            <FontAwesomeIcon icon={faArrowUp} style={{color: "#ffffff",}} size={20} />
           </View>
-          <View style={[styles.nav, { height: navHeight }]}>
-            <View style={styles.boxconteudo}>
-              <FontAwesomeIcon icon={faMicrophone} style={styles.Iconbox} size={24} />
-              <TextInput
-                placeholder='Descrição'
-                style={styles.descricaoInput}
-                value={descricao}
-                onChangeText={ (digitado) => setDescricao( digitado )}
-              />
+          <View>
+          <Text style={styles.bottomText}>Receitas</Text>
+            <Text style={styles.subbottomTextreceitas}>R${somaReceitas}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.caixadespesas} onPress={exibirdespesas}>
+        <View style={styles.boladespesas}>
+            <FontAwesomeIcon icon={faArrowDown} style={{color: "#ffffff",}} size={20} />
+          </View>
+          <View style={styles.subBottomContainer}>
+          <Text style={styles.bottomText}>Despesas</Text>
+            <Text style={styles.subbottomText}>R${somaDespesas}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      <View>
+
+        <View style={styles.box}>
+        <Text style={styles.divisionText}>Contas</Text>
+          <View style={styles.divcontasbox}>
+
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faBuildingColumns} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Banco</Text>
+              <Text style={styles.somaBanco}>R$5.000,00</Text>
+              </View>
+            </View>
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faWallet} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Carteira</Text>
+              <Text style={styles.somaBanco}>R$2.000,00</Text>
+              </View>
             </View>
             <View style={styles.boxlinha}>
               <View style={styles.linha}></View>
             </View>
-
-            <View style={styles.boxconteudo}>
-              <FontAwesomeIcon icon={faBookmark} style={styles.Iconbox} size={24} />
-              <SelectList
-                setSelected={(val) => setCategoria(val)}
-                data={categoriaconst}
-                save="value"
-                placeholder='Categoria'
-                boxStyles={{
-                  width: 150,
-                  height: 45,
-                  marginTop: 10,
-                  borderRadius: 30
-                }}
-              />
-            </View>
-            <View style={styles.boxlinha}>
-              <View style={styles.linha}></View>
-            </View>
-
-            <View style={styles.boxconteudo}>
-              <FontAwesomeIcon icon={faBookmark} style={styles.Iconbox} size={24} />
-              <SelectList
-                setSelected={(val) => setConta(val)}
-                data={contaconst}
-                save="value"
-                placeholder='Conta'
-                boxStyles={{
-                  width: 150,
-                  height: 45,
-                  marginTop: 10,
-                  borderRadius: 30
-                }}
-              />
-            </View>
-            <View style={styles.boxlinha}>
-              <View style={styles.linha}></View>
-            </View>
-
-            <View style={styles.circleButton}>
-              <TouchableOpacity
-                style={styles.buttonconfirmar}
-                onPress={adicionar}
-              >
-                <FontAwesomeIcon icon={faCheck} style={{ color: "#ffffff", }} />
-              </TouchableOpacity>
+            <View style={styles.totalContas}>
+              <Text style={styles.textTotal}>Total</Text>
+              <Text style={styles.textTotalNum}>R$5.000,00</Text>
             </View>
           </View>
         </View>
-      </ScrollView>
+
+        { rede ? <Text></Text> : 
+        <View style={styles.boxcartoes} >
+        <Text style={styles.divisionText}>Cartões de Crédito</Text>
+          <View style={styles.divcontasbox}>
+
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faCcMastercard} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Cartão Inter</Text>
+              <Text style={styles.somaCartao}>R$2.300,00</Text>
+              </View>
+            </View>
+            <View style={styles.contasContBox}>
+              <View>
+                <FontAwesomeIcon icon={faCcVisa} style={{color: "#ffffff",}} size={24} />
+              </View>
+              <View style={styles.textBoxContas}>
+              <Text style={styles.NomeTipo}>Cartão Itaú</Text>
+              <Text style={styles.somaBanco}>R$1.000,00</Text>
+              </View>
+            </View>
+            <View style={styles.boxlinha}>
+              <View style={styles.linha}></View>
+            </View>
+            <View style={styles.totalContas}>
+              <Text style={styles.textTotal}>Total</Text>
+              <Text style={styles.textTotalNumNeg}>R$1.300,00</Text>
+            </View>
+          </View>
+        </View>
+        }
+
+
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#2980B9',
-    padding: 20,
-    height: '17%',
-    width: '100%',
+    backgroundColor: "#2C3E50",
+    paddingVertical: 70, 
+    alignItems: "center",
+    position: "relative",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20, 
   },
-  headerContent: {
-    marginTop: 17,
+  headerTextSmall: {
+    fontSize: 10, 
+    fontWeight: "bold",
+    color: "white",
+    marginBottom: 5,
+    opacity: 0.7, 
+  },
+  headerTextBig: {
+    fontSize: 20, 
+    fontWeight: "bold",
+    color: "white",
+  },
+  caixareceitas: {
+    position: "absolute",
+    bottom: 3,
+    left: 0,
+    padding: 10,
+    flexDirection: 'row',
+  },
+  bolareceitas: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#45B500",
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5
+  },
+  bottomText: {
+    fontSize: 14,
+    color: "white",
+    fontWeight: 'bold'
+  },
+  subbottomTextreceitas: {
+    fontSize: 20,
+    color: "green",
+    fontWeight: 'bold'
+  },
+  boladespesas: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#DB0000",
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 5
+  },
+  subbottomText: {
+    fontSize: 20,
+    color: "red",
+    fontWeight: 'bold',
+  },
+  caixadespesas: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    padding: 10,
+    flexDirection: 'row',
+  },
+  box: {
+    marginVertical: 10, 
+    marginHorizontal: 10,
+  },
+  divisionText: {
+    color: "#8D8D8D",
+    fontSize: 20,
+    textAlign: "left", 
+    bottom: -5,
+    fontWeight: 'bold'
+  },
+
+  divcontasbox: {
+    justifyContent: 'center',
+    top: 20,
+    backgroundColor: "#2C3E50",
+    borderRadius: 20,
+  },
+  contasContBox: {
     flexDirection: 'row',
     alignItems: 'center',
+    top: 10,
+    left: 25,
+    marginBottom: 15
   },
-  headerText: {
-    color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 10,
+  textBoxContas: {
+    left: 15
   },
-  backButton: {
-    marginRight: 10,
-  },
-  nav: {
-    backgroundColor: 'white',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    display: 'flex',
-  },
-  caixadespesa: {
-    marginTop: 10
-  },
-  valodespesacss: {
+  NomeTipo: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 15,
   },
-  input: {
-    marginTop: 3,
-    fontWeight: '900',
-    fontSize: 25,
-    color: 'white',
+  somaBanco: {
+    color: '#45B500',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
-  boxconteudo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  Iconbox: {
-    marginTop: 10,
-    marginRight: 10,
-    marginLeft: 15,
-  },
-  descricaoInput: {
-    flex: 1,
-    borderRadius: 5,
-    padding: 10,
-    marginTop: 10,
-    color: '#000000',
+  somaCartao: {
+    color: '#DB0000',
+    fontWeight: 'bold',
+    fontSize: 12,
   },
   boxlinha: {
     justifyContent: 'center',
@@ -207,17 +273,34 @@ const styles = StyleSheet.create({
     width: '90%',
     marginTop: 10,
   },
-  circleButton: {
-    position: 'absolute',
-    bottom: 40, 
-    alignSelf: 'center',
-  },
-  buttonconfirmar: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#FF5353",
-    borderRadius: 100,
-    justifyContent: 'center',
+  totalContas: {
+    height: 40,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between'
   },
+  textTotal: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+    left: 25
+  },
+  textTotalNum: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+    right: 20
+  },
+  textTotalNumNeg: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#DB0000',
+    right: 20
+  },
+  boxcartoes: {
+    marginVertical: 10, 
+    marginHorizontal: 10,
+    marginTop: 50
+  }
+  
 });
